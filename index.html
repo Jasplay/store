@@ -3,265 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SariTech Owner Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>SariTech Owner Daily Sales</title>
   <style>
     :root {
-      --bg: #f8fafc; --card: #ffffff; --text: #1e2937; --muted: #64748b;
-      --border: #e2e8f0; --blue: #3b82f6; --green: #10b981; --red: #ef4444;
+      --bg: #f4f7fb; --card: #ffffff; --text: #111827; --muted: #64748b;
+      --border: #dbe3ef; --blue: #2563eb; --green: #15803d; --red: #b91c1c;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      line-height: 1.5;
-    }
-    .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
-    }
-    h1 { font-size: 28px; font-weight: 700; }
-    .subtitle { color: var(--muted); }
-    .controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
-    select, input, button {
-      padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
-      background: white;
-    }
-    button {
-      background: var(--blue); color: white; border: none; font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { background: #2563eb; }
-    .status {
-      padding: 12px 16px; border-radius: 10px; margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px; font-size: 14px;
-    }
-    .status.success { background: #ecfdf5; color: #10b981; }
-    .status.error { background: #fef2f2; color: #ef4444; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background: white; padding: 20px; border-radius: 12px;
-      border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .stat-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-    .stat-value { font-size: 28px; font-weight: 700; }
-
-    .chart-container {
-      background: white; padding: 20px; border-radius: 12px;
-      border: 1px solid var(--border); margin-bottom: 24px;
-    }
-
-    table {
-      width: 100%; border-collapse: collapse; background: white;
-      border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #f1f5f9; }
-    th { background: #f8fafc; font-weight: 600; color: var(--muted); }
-    .amount { font-weight: 600; }
-
-    .positive { color: var(--green); }
-    .negative { color: var(--red); }
-
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: 1fr; }
-    }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+    .page { width:min(1100px,100%); margin:0 auto; padding:22px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+    h1 { font-size:clamp(24px,4vw,36px); margin:0; }
+    .subtitle { color:var(--muted); margin-top:6px; font-size:14px; }
+    .controls { display:flex; align-items:end; gap:10px; flex-wrap:wrap; }
+    label { display:grid; gap:5px; color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; }
+    input, select { min-height:40px; border:1px solid var(--border); border-radius:8px; padding:8px 10px; background:#fff; }
+    button { min-height:40px; border:0; border-radius:8px; background:var(--blue); color:#fff; cursor:pointer; font-weight:800; padding:9px 14px; }
+    .status { min-height:44px; display:flex; align-items:center; gap:10px; border:1px solid var(--border); border-radius:8px; background:var(--card); padding:12px 14px; margin-bottom:16px; box-shadow:var(--shadow); }
+    .status.error { border-color:#fecaca; background:#fff1f2; color:var(--red); }
+    .dot { width:10px; height:10px; border-radius:999px; background:var(--muted); }
+    .dot.ok { background:var(--green); }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:16px; }
+    .card { border:1px solid var(--border); border-radius:8px; background:var(--card); padding:16px; box-shadow:var(--shadow); min-height:118px; display:grid; align-content:space-between; }
+    .card span { color:var(--muted); font-size:13px; font-weight:800; text-transform:uppercase; }
+    .card strong { font-size:clamp(24px,4vw,34px); }
+    .positive { color:var(--green); }
+    .negative { color:var(--red); }
+    .panel { border:1px solid var(--border); border-radius:8px; background:var(--card); box-shadow:var(--shadow); overflow:hidden; }
+    .panel-head { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; }
+    table { width:100%; border-collapse:collapse; min-width:720px; }
+    th, td { padding:12px 10px; border-bottom:1px solid var(--border); text-align:left; }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; }
+    .amount { font-weight:800; white-space:nowrap; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
+  <main class="page">
+    <header class="topbar">
       <div>
-        <h1>📊 SariTech Owner Dashboard</h1>
-        <p class="subtitle" id="branchLabel">Real-time sales monitoring</p>
+        <h1>Owner Daily Sales</h1>
+        <p id="branchLabel" class="subtitle">SariTech remote sales monitor</p>
       </div>
       <div class="controls">
-        <select id="branchFilter"></select>
-        <input type="date" id="dateFilter">
-        <button id="refreshBtn">🔄 Refresh</button>
-        <button onclick="exportCSV()">📥 Export CSV</button>
+        <label>Branch <select id="branchFilter"></select></label>
+        <label>Date <input id="dateFilter" type="date"></label>
+        <button id="refreshBtn">Refresh</button>
       </div>
     </header>
 
-    <div id="status" class="status">Loading data...</div>
-
-    <div class="stats-grid" id="statsGrid"></div>
-
-    <div class="chart-container">
-      <h3>Sales Trend (Last 7 Days)</h3>
-      <canvas id="salesChart" height="100"></canvas>
+    <div id="status" class="status">
+      <span class="dot"></span>
+      <span>Loading...</span>
     </div>
 
-    <div class="chart-container">
-      <h3>Daily Reports</h3>
-      <table id="reportsTable">
-        <thead>
-          <tr>
-            <th>Date</th><th>Branch</th><th>Total Sales</th><th>Net Profit</th>
-            <th>Expenses</th><th>Transactions</th><th>Sent At</th>
-          </tr>
-        </thead>
-        <tbody id="reportsBody"></tbody>
-      </table>
-    </div>
-  </div>
+    <section id="stats" class="stats"></section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Daily Reports</h2>
+        <p id="reportCount" class="subtitle"></p>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Branch</th><th>Total Sales</th><th>Net Profit</th>
+              <th>Expenses</th><th>Transactions</th><th>Sent</th>
+            </tr>
+          </thead>
+          <tbody id="reportsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const OWNER_SYNC_URL = "https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec";  // ← UPDATE THIS
-
-    let allReports = [];
-    let salesChart = null;
+    // === CHANGE THIS TO YOUR ACTUAL GOOGLE APPS SCRIPT URL ===
+    const OWNER_SYNC_URL = "https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec";
+    // =========================================================
 
     const $ = id => document.getElementById(id);
 
-    function formatMoney(v) {
-      return `₱${Number(v||0).toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
+    function money(v) { return `PHP ${Number(v||0).toLocaleString('en-PH',{minimumFractionDigits:2})}`; }
+    function count(v) { return Number(v||0).toLocaleString('en-PH'); }
+
+    let reports = [];
+
+    function setStatus(msg, ok=true) {
+      const el = $('status');
+      el.className = ok ? 'status' : 'status error';
+      el.innerHTML = `<span class="dot ${ok?'ok':''}"></span><span>${msg}</span>`;
     }
 
     async function loadData() {
       try {
-        $('#status').className = 'status';
-        $('#status').textContent = 'Fetching latest sales...';
+        setStatus('Connecting to server...', true);
 
-        const res = await fetch(`${OWNER_SYNC_URL}?action=getAll&t=${Date.now()}`);
-        const data = await res.json();
-
-        if (!data.ok) throw new Error(data.error || "Failed to load");
-
-        allReports = data.reports || [];
-        renderAll();
+        const url = `${OWNER_SYNC_URL}?action=getAll&t=${Date.now()}`;
         
-        $('#status').className = 'status success';
-        $('#status').innerHTML = `✅ Updated just now • ${allReports.length} reports loaded`;
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache'
+        });
+
+        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+
+        const data = await response.json();
+
+        if (!data.ok) throw new Error(data.error || "Server returned error");
+
+        reports = data.reports || [];
+
+        // Render
+        renderDashboard();
+        setStatus(`Updated ${new Date().toLocaleTimeString()}`, true);
+
       } catch (err) {
         console.error(err);
-        $('#status').className = 'status error';
-        $('#status').innerHTML = `❌ ${err.message}`;
+        setStatus(`Could not reach server: ${err.message}<br><small>Check OWNER_SYNC_URL and redeploy Google Script as new version.</small>`, false);
       }
     }
 
-    function renderAll() {
-      renderStats();
-      renderBranchFilter();
-      renderTable();
-      renderTrendChart();
-    }
+    function renderDashboard() {
+      const date = $('dateFilter').value || new Date().toISOString().slice(0,10);
+      const branch = $('branchFilter').value;
 
-    function renderStats() {
-      const today = new Date().toISOString().slice(0,10);
-      const todayData = allReports.filter(r => r.date === today);
+      const filtered = branch ? reports.filter(r => (r.branchId || r.branchName) === branch) : reports;
 
-      let totalSales = 0, totalProfit = 0, totalExp = 0, totalTrans = 0;
+      // Branch filter
+      const branchSet = new Set();
+      reports.forEach(r => branchSet.add(r.branchId || r.branchName));
+      const select = $('branchFilter');
+      select.innerHTML = `<option value="">All branches</option>` + 
+        Array.from(branchSet).map(b => {
+          const name = reports.find(r => (r.branchId || r.branchName) === b)?.branchName || b;
+          return `<option value="${b}">${name}</option>`;
+        }).join('');
 
-      todayData.forEach(r => {
-        totalSales += Number(r.totalSales || 0);
-        totalProfit += Number(r.netProfit || 0);
-        totalExp += Number(r.totalExpenses || 0);
-        totalTrans += Number(r.transactionCount || 0);
-      });
+      if (branch) select.value = branch;
 
-      $('#statsGrid').innerHTML = `
-        <div class="stat-card"><h3>TODAY SALES</h3><div class="stat-value">${formatMoney(totalSales)}</div></div>
-        <div class="stat-card"><h3>NET PROFIT</h3><div class="stat-value ${totalProfit>=0?'positive':'negative'}">${formatMoney(totalProfit)}</div></div>
-        <div class="stat-card"><h3>EXPENSES</h3><div class="stat-value">${formatMoney(totalExp)}</div></div>
-        <div class="stat-card"><h3>TRANSACTIONS</h3><div class="stat-value">${totalTrans}</div></div>
-      `;
-    }
-
-    function renderBranchFilter() {
-      const select = $('#branchFilter');
-      const current = select.value;
-      const branches = [...new Set(allReports.map(r => r.branchName))];
-      
-      select.innerHTML = `<option value="">All Branches</option>` +
-        branches.map(b => `<option value="${b}">${b}</option>`).join('');
-      
-      if (current && branches.includes(current)) select.value = current;
-    }
-
-    function renderTable() {
-      const tbody = $('#reportsBody');
-      const filtered = $('#branchFilter').value 
-        ? allReports.filter(r => r.branchName === $('#branchFilter').value)
-        : allReports;
-
-      tbody.innerHTML = filtered.map(r => `
+      // Table
+      $('reportsBody').innerHTML = filtered.map(r => `
         <tr>
-          <td>${r.date}</td>
-          <td><strong>${r.branchName}</strong></td>
-          <td class="amount">${formatMoney(r.totalSales)}</td>
-          <td class="amount ${Number(r.netProfit)>=0 ? 'positive' : 'negative'}">${formatMoney(r.netProfit)}</td>
-          <td class="amount">${formatMoney(r.totalExpenses)}</td>
-          <td>${r.transactionCount || 0}</td>
+          <td>${r.date || ''}</td>
+          <td><strong>${r.branchName || 'Unknown'}</strong></td>
+          <td class="amount">${money(r.totalSales)}</td>
+          <td class="amount ${Number(r.netProfit) >= 0 ? 'positive' : 'negative'}">${money(r.netProfit)}</td>
+          <td class="amount">${money(r.totalExpenses)}</td>
+          <td>${count(r.transactionCount)}</td>
           <td>${r.sentAt ? r.sentAt.substring(0,16).replace('T',' ') : '-'}</td>
         </tr>
-      `).join('');
+      `).join('') || `<tr><td colspan="7" style="text-align:center;padding:40px;color:#888">No reports found</td></tr>`;
+
+      $('reportCount').textContent = `${filtered.length} report${filtered.length===1?'':'s'}`;
     }
 
-    function renderTrendChart() {
-      const ctx = $('#salesChart');
-      if (salesChart) salesChart.destroy();
-
-      // Group by date
-      const byDate = {};
-      allReports.forEach(r => {
-        if (!byDate[r.date]) byDate[r.date] = 0;
-        byDate[r.date] += Number(r.totalSales || 0);
-      });
-
-      const dates = Object.keys(byDate).sort().slice(-7);
-      const sales = dates.map(d => byDate[d]);
-
-      salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [{
-            label: 'Daily Sales',
-            data: sales,
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            tension: 0.4,
-            borderWidth: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function exportCSV() {
-      if (!allReports.length) return alert("No data to export");
-      
-      let csv = "Date,Branch,Total Sales,Net Profit,Expenses,Transactions,Sent At\n";
-      allReports.forEach(r => {
-        csv += `"${r.date}","${r.branchName}",${r.totalSales},${r.netProfit},${r.totalExpenses},${r.transactionCount || 0},"${r.sentAt}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `saritech-sales-${new Date().toISOString().slice(0,10)}.csv`;
-      a.click();
-    }
-
-    // Event Listeners
     window.addEventListener('load', () => {
-      $('#refreshBtn').addEventListener('click', loadData);
-      $('#branchFilter').addEventListener('change', renderTable);
+      $('dateFilter').value = new Date().toISOString().slice(0,10);
+      $('refreshBtn').onclick = loadData;
+      $('branchFilter').onchange = renderDashboard;
+      $('dateFilter').onchange = renderDashboard;
       loadData();
-      setInterval(loadData, 180000); // Auto refresh every 3 minutes
+      setInterval(loadData, 120000);
     });
   </script>
 </body>
