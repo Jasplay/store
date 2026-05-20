@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SariTech Owner Daily Sales</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --border: #dbe3ef;
+      --blue: #2563eb;
+      --green: #15803d;
+      --red: #b91c1c;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(24px, 4vw, 36px);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    input,
+    select {
+      min-height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
+    }
+
+    button {
+      min-height: 40px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      padding: 9px 14px;
+    }
+
+    .status {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .status.error {
+      border-color: #fecaca;
+      background: #fff1f2;
+      color: var(--red);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .dot.ok {
+      background: var(--green);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card,
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      min-height: 118px;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      gap: 12px;
+    }
+
+    .card span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .card strong {
+      display: block;
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.05;
+      word-break: break-word;
+    }
+
+    .card small {
+      color: var(--muted);
+    }
+
+    .positive {
+      color: var(--green);
+    }
+
+    .negative {
+      color: var(--red);
+    }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 10px;
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .amount {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .empty {
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      margin: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .controls,
+      label,
+      select,
+      button {
+        width: 100%;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <h1>Owner Daily Sales</h1>
+        <p id="branchLabel" class="subtitle">SariTech remote sales monitor</p>
+      </div>
+
+      <div class="controls">
+        <label>
+          Branch
+          <select id="branchFilter">
+            <option value="">All branches</option>
+          </select>
+        </label>
+        <label>
+          Date
+          <input id="dateFilter" type="date" />
+        </label>
+        <button id="refreshBtn" type="button">Refresh</button>
+      </div>
+    </header>
+
+    <div id="status" class="status">
+      <span class="dot"></span>
+      <span>Loading daily sales...</span>
+    </div>
+
+    <section id="stats" class="stats"></section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Daily Reports</h2>
+        <p id="reportCount" class="subtitle"></p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Branch</th>
+              <th>Total Sales</th>
+              <th>Net Profit</th>
+              <th>Expenses</th>
+              <th>Transactions</th>
+              <th>Sent</th>
+            </tr>
+          </thead>
+          <tbody id="reportsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const OWNER_SYNC_URL = 'https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec';
+
+    const $ = id => document.getElementById(id);
+    const moneyFormatter = new Intl.NumberFormat('en-PH', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const numberFormatter = new Intl.NumberFormat('en-PH');
+    let ownerReports = [];
+
+    function todayText() {
+      const date = new Date();
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+      return date.toISOString().slice(0, 10);
+    }
+
+    function money(value) {
+      return `PHP ${moneyFormatter.format(Number(value || 0))}`;
+    }
+
+    function count(value) {
+      return numberFormatter.format(Number(value || 0));
+    }
+
+    function safe(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[char]));
+    }
+
+    function setStatus(message, ok = true) {
+      $('status').className = ok ? 'status' : 'status error';
+      $('status').innerHTML = `
+        <span class="dot ${ok ? 'ok' : ''}"></span>
+        <span>${safe(message)}</span>
+      `;
+    }
+
+    function loadViaJsonp(url) {
+      return new Promise((resolve, reject) => {
+        const callbackName = `ownerDashboard_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const script = document.createElement('script');
+        const separator = url.includes('?') ? '&' : '?';
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error('Owner sync server did not respond.'));
+        }, 12000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          script.remove();
+          delete window[callbackName];
+        }
+
+        window[callbackName] = data => {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = () => {
+          cleanup();
+          reject(new Error('Could not reach owner sync server.'));
+        };
+
+        script.src = `${url}${separator}action=getAll&callback=${callbackName}&t=${Date.now()}`;
+        document.body.appendChild(script);
+      });
+    }
+
+    function normalizeReports(data) {
+      const rows = Array.isArray(data) ? data : data?.reports;
+
+      if (!Array.isArray(rows)) {
+        return [];
+      }
+
+      return rows
+        .map(row => ({
+          date: row.date || '',
+          branchName: row.branchName || 'Unknown Branch',
+          branchId: row.branchId || row.branchName || 'UNKNOWN-BRANCH',
+          totalSales: Number(row.totalSales || 0),
+          netProfit: Number(row.netProfit || 0),
+          totalExpenses: Number(row.totalExpenses || 0),
+          transactionCount: Number(row.transactionCount || 0),
+          sentAt: row.sentAt || row.generatedAt || ''
+        }))
+        .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    }
+
+    function branchKey(report) {
+      return report.branchId || report.branchName || 'UNKNOWN-BRANCH';
+    }
+
+    function getBranches(reports) {
+      const branches = new Map();
+
+      reports.forEach(report => {
+        const key = branchKey(report);
+        if (!branches.has(key)) {
+          branches.set(key, report.branchName || 'Unknown Branch');
+        }
+      });
+
+      return [...branches.entries()]
+        .map(([id, name]) => ({ id, name }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    function populateBranchFilter(reports) {
+      const select = $('branchFilter');
+      const currentValue = select.value;
+      const branches = getBranches(reports);
+
+      select.innerHTML = `
+        <option value="">All branches</option>
+        ${branches.map(branch => `
+          <option value="${safe(branch.id)}">${safe(branch.name)}</option>
+        `).join('')}
+      `;
+
+      if (branches.some(branch => branch.id === currentValue)) {
+        select.value = currentValue;
+      }
+    }
+
+    function filterReportsByBranch(reports, selectedBranch) {
+      if (!selectedBranch) {
+        return reports;
+      }
+
+      return reports.filter(report => branchKey(report) === selectedBranch);
+    }
+
+    function summarizeSelectedDate(reports, selectedDate) {
+      return reports
+        .filter(report => report.date === selectedDate)
+        .reduce((summary, report) => ({
+          totalSales: summary.totalSales + Number(report.totalSales || 0),
+          netProfit: summary.netProfit + Number(report.netProfit || 0),
+          totalExpenses: summary.totalExpenses + Number(report.totalExpenses || 0),
+          transactionCount: summary.transactionCount + Number(report.transactionCount || 0)
+        }), {
+          totalSales: 0,
+          netProfit: 0,
+          totalExpenses: 0,
+          transactionCount: 0
+        });
+    }
+
+    function selectedBranchName(selectedBranch, reports) {
+      if (!selectedBranch) {
+        return 'All branches';
+      }
+
+      return reports.find(report => branchKey(report) === selectedBranch)?.branchName || 'Selected branch';
+    }
+
+    function renderStats(report, label) {
+      const cards = [
+        ['Total Sales', money(report.totalSales), label, ''],
+        ['Net Profit', money(report.netProfit), 'after expenses', report.netProfit >= 0 ? 'positive' : 'negative'],
+        ['Expenses', money(report.totalExpenses), label, ''],
+        ['Transactions', count(report.transactionCount), label, '']
+      ];
+
+      $('stats').innerHTML = cards.map(([label, value, note, className]) => `
+        <article class="card">
+          <span>${label}</span>
+          <strong class="${className}">${value}</strong>
+          <small>${note}</small>
+        </article>
+      `).join('');
+    }
+
+    function renderReports(reports, selectedDate, selectedBranch) {
+      const existingEmpty = document.querySelector('.empty');
+      if (existingEmpty) existingEmpty.remove();
+
+      $('reportCount').textContent = `${count(reports.length)} report${reports.length === 1 ? '' : 's'} received`;
+
+      if (!reports.length) {
+        $('reportsBody').innerHTML = '';
+        $('reportsBody').closest('.panel').querySelector('.table-wrap').insertAdjacentHTML(
+          'beforebegin',
+          '<div class="empty">No daily sales found for this branch.</div>'
+        );
+        renderStats(
+          { totalSales: 0, netProfit: 0, totalExpenses: 0, transactionCount: 0 },
+          `${selectedDate} / ${selectedBranchName(selectedBranch, ownerReports)}`
+        );
+        return;
+      }
+
+      $('reportsBody').innerHTML = reports.map(row => `
+        <tr>
+          <td>${safe(row.date)}</td>
+          <td><strong>${safe(row.branchName)}</strong></td>
+          <td class="amount">${money(row.totalSales)}</td>
+          <td class="amount ${row.netProfit >= 0 ? 'positive' : 'negative'}">${money(row.netProfit)}</td>
+          <td class="amount">${money(row.totalExpenses)}</td>
+          <td>${count(row.transactionCount)}</td>
+          <td>${safe(row.sentAt || '-')}</td>
+        </tr>
+      `).join('');
+
+      const selectedReport = summarizeSelectedDate(reports, selectedDate);
+
+      renderStats(selectedReport, `${selectedDate} / ${selectedBranchName(selectedBranch, ownerReports)}`);
+    }
+
+    async function loadOwnerData() {
+      const selectedDate = $('dateFilter').value || todayText();
+      const selectedBranch = $('branchFilter').value;
+
+      try {
+        setStatus('Loading daily sales...', true);
+        const data = await loadViaJsonp(OWNER_SYNC_URL);
+
+        if (data && data.ok === false) {
+          throw new Error(data.error || 'Owner sync returned an error.');
+        }
+
+        ownerReports = normalizeReports(data);
+        populateBranchFilter(ownerReports);
+
+        const activeBranch = $('branchFilter').value;
+        const reports = filterReportsByBranch(ownerReports, activeBranch);
+        const branchName = selectedBranchName(activeBranch, ownerReports);
+
+        $('branchLabel').textContent = `${branchName} remote sales monitor`;
+        renderReports(reports, selectedDate, activeBranch);
+        setStatus(`Updated ${new Date().toLocaleTimeString()}. Showing ${selectedDate} / ${branchName}.`, true);
+      } catch (err) {
+        console.error(err);
+        renderStats(
+          { totalSales: 0, netProfit: 0, totalExpenses: 0, transactionCount: 0 },
+          `${selectedDate} / ${selectedBranchName(selectedBranch, ownerReports)}`
+        );
+        $('reportsBody').innerHTML = '';
+        setStatus(
+          `${err.message} Check OWNER_SYNC_URL, update google-apps-script.gs, then redeploy the Apps Script web app as a new version.`,
+          false
+        );
+      }
+    }
+
+    window.addEventListener('load', () => {
+      $('dateFilter').value = todayText();
+      $('refreshBtn').addEventListener('click', loadOwnerData);
+      $('branchFilter').addEventListener('change', loadOwnerData);
+      $('dateFilter').addEventListener('change', loadOwnerData);
+      loadOwnerData();
+      setInterval(loadOwnerData, 60000);
+    });
+  </script>
+</body>
+</html>
