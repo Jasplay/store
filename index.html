@@ -38,21 +38,9 @@
       flex-wrap: wrap;
     }
     h1, h2, h3, p { margin: 0; }
-    h1 {
-      font-size: clamp(24px, 4vw, 36px);
-      letter-spacing: 0;
-    }
-    .subtitle {
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: 14px;
-    }
-    .controls {
-      display: flex;
-      align-items: end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    h1 { font-size: clamp(24px, 4vw, 36px); }
+    .subtitle { color: var(--muted); margin-top: 6px; font-size: 14px; }
+    .controls { display: flex; align-items: end; gap: 10px; flex-wrap: wrap; }
     label {
       display: grid;
       gap: 5px;
@@ -67,11 +55,6 @@
       border-radius: 8px;
       background: #fff;
       padding: 8px 10px;
-      outline: none;
-    }
-    input:focus, select:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
     }
     button {
       min-height: 40px;
@@ -106,7 +89,6 @@
       height: 10px;
       border-radius: 999px;
       background: var(--muted);
-      flex: 0 0 auto;
     }
     .dot.ok { background: var(--green); }
     .stats {
@@ -120,23 +102,13 @@
       border-radius: 8px;
       background: var(--card);
       box-shadow: var(--shadow);
-      min-height: 118px;
       padding: 16px;
+      min-height: 118px;
       display: grid;
       align-content: space-between;
-      gap: 12px;
     }
-    .card span {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    .card strong {
-      display: block;
-      font-size: clamp(24px, 4vw, 34px);
-      line-height: 1.05;
-    }
+    .card span { color: var(--muted); font-size: 13px; font-weight: 800; text-transform: uppercase; }
+    .card strong { font-size: clamp(24px, 4vw, 34px); }
     .positive { color: var(--green); }
     .negative { color: var(--red); }
     .panel {
@@ -150,40 +122,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
       padding: 14px 16px;
-    }
-    .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%;
-      min-width: 720px;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
       border-bottom: 1px solid var(--border);
-      padding: 12px 10px;
-      text-align: left;
     }
-    th {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-    }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
     .amount { font-weight: 800; white-space: nowrap; }
-    .empty {
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      color: var(--muted);
-      margin: 16px;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    @media (max-width: 860px) {
-      .topbar { flex-direction: column; align-items: stretch; }
-      .controls, label, select, button { width: 100%; }
-    }
+    .empty { padding: 40px; text-align: center; color: var(--muted); border: 1px dashed var(--border); margin: 16px; border-radius: 8px; }
   </style>
 </head>
 <body>
@@ -194,15 +140,9 @@
         <p id="branchLabel" class="subtitle">SariTech remote sales monitor</p>
       </div>
       <div class="controls">
-        <label>
-          Branch
-          <select id="branchFilter"></select>
-        </label>
-        <label>
-          Date
-          <input id="dateFilter" type="date" />
-        </label>
-        <button id="refreshBtn" type="button">Refresh</button>
+        <label>Branch <select id="branchFilter"></select></label>
+        <label>Date <input id="dateFilter" type="date" /></label>
+        <button id="refreshBtn">Refresh</button>
       </div>
     </header>
 
@@ -222,13 +162,8 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Branch</th>
-              <th>Total Sales</th>
-              <th>Net Profit</th>
-              <th>Expenses</th>
-              <th>Transactions</th>
-              <th>Sent</th>
+              <th>Date</th><th>Branch</th><th>Total Sales</th><th>Net Profit</th>
+              <th>Expenses</th><th>Transactions</th><th>Sent</th>
             </tr>
           </thead>
           <tbody id="reportsBody"></tbody>
@@ -238,171 +173,24 @@
   </main>
 
   <script>
-    // ==================== CHANGE THIS URL ====================
-    const OWNER_SYNC_URL = 'https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec';
-    // =======================================================
+    // ==================== PUT YOUR GOOGLE APPS SCRIPT URL HERE ====================
+    const OWNER_SYNC_URL = "https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec";
+    // ===========================================================================
 
     const $ = id => document.getElementById(id);
-    const moneyFormatter = new Intl.NumberFormat('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const numberFormatter = new Intl.NumberFormat('en-PH');
+    const money = v => `PHP ${Number(v||0).toLocaleString('en-PH', {minimumFractionDigits:2})}`;
+    const count = v => Number(v||0).toLocaleString('en-PH');
 
     let ownerReports = [];
 
     function todayText() {
-      const date = new Date();
-      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-      return date.toISOString().slice(0, 10);
+      return new Date().toISOString().slice(0,10);
     }
 
-    function money(value) {
-      return `PHP ${moneyFormatter.format(Number(value || 0))}`;
-    }
-    function count(value) {
-      return numberFormatter.format(Number(value || 0));
-    }
-    function safe(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, char => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-      }[char]));
-    }
-
-    function setStatus(message, ok = true) {
-      const statusEl = $('status');
-      statusEl.className = ok ? 'status' : 'status error';
-      statusEl.innerHTML = `
-        <span class="dot ${ok ? 'ok' : ''}"></span>
-        <span>${safe(message)}</span>
-      `;
-    }
-
-    async function loadViaJsonp(url) {
-      return new Promise((resolve, reject) => {
-        const callbackName = `owner_cb_${Date.now()}`;
-        const script = document.createElement('script');
-        const separator = url.includes('?') ? '&' : '?';
-        
-        const timeout = setTimeout(() => {
-          cleanup();
-          reject(new Error('Request timeout'));
-        }, 15000);
-
-        function cleanup() {
-          clearTimeout(timeout);
-          script.remove();
-          delete window[callbackName];
-        }
-
-        window[callbackName] = data => {
-          cleanup();
-          resolve(data);
-        };
-
-        script.onerror = () => {
-          cleanup();
-          reject(new Error('Could not reach owner sync server'));
-        };
-
-        script.src = `${url}${separator}action=getAll&callback=${callbackName}&t=${Date.now()}`;
-        document.body.appendChild(script);
-      });
-    }
-
-    function normalizeReports(data) {
-      const rows = Array.isArray(data) ? data : (data?.reports || []);
-      return rows
-        .map(row => ({
-          date: row.date || '',
-          branchName: row.branchName || 'Unknown Branch',
-          branchId: row.branchId || row.branchName || 'UNKNOWN',
-          totalSales: Number(row.totalSales || 0),
-          netProfit: Number(row.netProfit || 0),
-          totalExpenses: Number(row.totalExpenses || 0),
-          transactionCount: Number(row.transactionCount || 0),
-          sentAt: row.sentAt || ''
-        }))
-        .sort((a, b) => String(b.date).localeCompare(String(a.date)));
-    }
-
-    // ... (rest of functions remain the same - they are already good)
-
-    function getBranches(reports) {
-      const branches = new Map();
-      reports.forEach(r => {
-        const key = r.branchId || r.branchName;
-        if (!branches.has(key)) branches.set(key, r.branchName);
-      });
-      return Array.from(branches.entries())
-        .map(([id, name]) => ({id, name}))
-        .sort((a,b) => a.name.localeCompare(b.name));
-    }
-
-    function populateBranchFilter(reports) {
-      const select = $('branchFilter');
-      const current = select.value;
-      const branches = getBranches(reports);
-      
-      select.innerHTML = `<option value="">All branches</option>` +
-        branches.map(b => `<option value="${safe(b.id)}">${safe(b.name)}</option>`).join('');
-      
-      if (branches.some(b => b.id === current)) select.value = current;
-    }
-
-    function filterReports(reports, branchId) {
-      if (!branchId) return reports;
-      return reports.filter(r => (r.branchId || r.branchName) === branchId);
-    }
-
-    function summarize(reports, date) {
-      return reports
-        .filter(r => r.date === date)
-        .reduce((acc, r) => ({
-          totalSales: acc.totalSales + r.totalSales,
-          netProfit: acc.netProfit + r.netProfit,
-          totalExpenses: acc.totalExpenses + r.totalExpenses,
-          transactionCount: acc.transactionCount + r.transactionCount
-        }), {totalSales:0, netProfit:0, totalExpenses:0, transactionCount:0});
-    }
-
-    function renderStats(summary, label) {
-      const cards = [
-        ['TOTAL SALES', money(summary.totalSales), label],
-        ['NET PROFIT', money(summary.netProfit), 'after expenses', summary.netProfit >= 0 ? 'positive' : 'negative'],
-        ['EXPENSES', money(summary.totalExpenses), label],
-        ['TRANSACTIONS', count(summary.transactionCount), label]
-      ];
-
-      $('stats').innerHTML = cards.map(([title, value, note, cls]) => `
-        <div class="card">
-          <span>${title}</span>
-          <strong class="${cls || ''}">${value}</strong>
-          <small>${note}</small>
-        </div>
-      `).join('');
-    }
-
-    function renderTable(reports, selectedDate, selectedBranch) {
-      $('reportCount').textContent = `${reports.length} report${reports.length === 1 ? '' : 's'}`;
-
-      if (!reports.length) {
-        $('reportsBody').innerHTML = '';
-        $('stats').innerHTML = '';
-        return;
-      }
-
-      $('reportsBody').innerHTML = reports.map(r => `
-        <tr>
-          <td>${safe(r.date)}</td>
-          <td><strong>${safe(r.branchName)}</strong></td>
-          <td class="amount">${money(r.totalSales)}</td>
-          <td class="amount ${r.netProfit >= 0 ? 'positive' : 'negative'}">${money(r.netProfit)}</td>
-          <td class="amount">${money(r.totalExpenses)}</td>
-          <td>${count(r.transactionCount)}</td>
-          <td>${safe(r.sentAt || '-')}</td>
-        </tr>
-      `).join('');
-
-      const summary = summarize(reports, selectedDate);
-      renderStats(summary, `${selectedDate} / ${selectedBranch || 'All branches'}`);
+    function setStatus(msg, isOk = true) {
+      const el = $('status');
+      el.className = isOk ? 'status' : 'status error';
+      el.innerHTML = `<span class="dot ${isOk?'ok':''}"></span><span>${msg}</span>`;
     }
 
     async function loadOwnerData() {
@@ -411,25 +199,50 @@
 
       try {
         setStatus('Loading daily sales...', true);
-        const data = await loadViaJsonp(OWNER_SYNC_URL);
-        
-        ownerReports = normalizeReports(data);
-        populateBranchFilter(ownerReports);
 
-        const filtered = filterReports(ownerReports, selectedBranch);
-        renderTable(filtered, selectedDate, selectedBranch);
+        const url = `${OWNER_SYNC_URL}?action=getAll&t=${Date.now()}`;
+        const res = await fetch(url, { method: 'GET', mode: 'cors' });
 
-        const branchName = selectedBranch ? 
-          ownerReports.find(r => (r.branchId || r.branchName) === selectedBranch)?.branchName || selectedBranch : 
-          'All branches';
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        $('branchLabel').textContent = `${branchName} remote sales monitor`;
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Server error');
+
+        ownerReports = (data.reports || []).sort((a,b) => String(b.date).localeCompare(String(a.date)));
+
+        // Populate branch filter
+        const branches = [...new Set(ownerReports.map(r => r.branchId || r.branchName))];
+        const select = $('branchFilter');
+        select.innerHTML = `<option value="">All branches</option>` +
+          branches.map(b => `<option value="${b}">${ownerReports.find(r=> (r.branchId||r.branchName)===b)?.branchName || b}</option>`).join('');
+
+        if (selectedBranch) select.value = selectedBranch;
+
+        // Filter reports
+        const filtered = selectedBranch 
+          ? ownerReports.filter(r => (r.branchId || r.branchName) === selectedBranch)
+          : ownerReports;
+
+        // Render table
+        $('reportsBody').innerHTML = filtered.map(r => `
+          <tr>
+            <td>${r.date}</td>
+            <td><strong>${r.branchName}</strong></td>
+            <td class="amount">${money(r.totalSales)}</td>
+            <td class="amount ${r.netProfit >= 0 ? 'positive' : 'negative'}">${money(r.netProfit)}</td>
+            <td class="amount">${money(r.totalExpenses)}</td>
+            <td>${count(r.transactionCount)}</td>
+            <td>${r.sentAt ? r.sentAt.slice(0,16).replace('T',' ') : '-'}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="7" class="empty">No reports yet</td></tr>';
+
+        $('reportCount').textContent = `${filtered.length} report${filtered.length === 1 ? '' : 's'}`;
+
         setStatus(`Updated ${new Date().toLocaleTimeString()}`, true);
 
       } catch (err) {
         console.error(err);
-        setStatus(err.message || 'Could not reach owner sync server. Check OWNER_SYNC_URL and redeploy Google Script.', false);
-        renderStats({totalSales:0, netProfit:0, totalExpenses:0, transactionCount:0}, `${selectedDate} / All branches`);
+        setStatus(`Could not reach server: ${err.message}. Check OWNER_SYNC_URL and redeploy.`, false);
       }
     }
 
@@ -440,7 +253,7 @@
       $('dateFilter').addEventListener('change', loadOwnerData);
       
       loadOwnerData();
-      setInterval(loadOwnerData, 90000); // auto refresh every 1.5 minutes
+      setInterval(loadOwnerData, 120000); // auto refresh every 2 minutes
     });
   </script>
 </body>
