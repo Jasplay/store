@@ -6,130 +6,36 @@
   <title>SariTech Owner Daily Sales</title>
   <style>
     :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #64748b;
-      --border: #dbe3ef;
-      --blue: #2563eb;
-      --green: #15803d;
-      --red: #b91c1c;
+      --bg: #f4f7fb; --card: #ffffff; --text: #111827; --muted: #64748b;
+      --border: #dbe3ef; --blue: #2563eb; --green: #15803d; --red: #b91c1c;
       --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
     }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    button, input, select { font: inherit; }
-    .page {
-      width: min(1100px, 100%);
-      margin: 0 auto;
-      padding: 22px;
-    }
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    h1, h2, h3, p { margin: 0; }
-    h1 { font-size: clamp(24px, 4vw, 36px); }
-    .subtitle { color: var(--muted); margin-top: 6px; font-size: 14px; }
-    .controls { display: flex; align-items: end; gap: 10px; flex-wrap: wrap; }
-    label {
-      display: grid;
-      gap: 5px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    input, select {
-      min-height: 40px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fff;
-      padding: 8px 10px;
-    }
-    button {
-      min-height: 40px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--blue);
-      color: #fff;
-      cursor: pointer;
-      font-weight: 800;
-      padding: 9px 14px;
-    }
-    .status {
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      color: var(--muted);
-      padding: 12px 14px;
-      margin-bottom: 16px;
-    }
-    .status.error {
-      border-color: #fecaca;
-      background: #fff1f2;
-      color: var(--red);
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--muted);
-    }
-    .dot.ok { background: var(--green); }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      padding: 16px;
-      min-height: 118px;
-      display: grid;
-      align-content: space-between;
-    }
-    .card span { color: var(--muted); font-size: 13px; font-weight: 800; text-transform: uppercase; }
-    .card strong { font-size: clamp(24px, 4vw, 34px); }
-    .positive { color: var(--green); }
-    .negative { color: var(--red); }
-    .panel {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; }
-    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; }
-    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
-    .amount { font-weight: 800; white-space: nowrap; }
-    .empty { padding: 40px; text-align: center; color: var(--muted); border: 1px dashed var(--border); margin: 16px; border-radius: 8px; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+    .page { width:min(1100px,100%); margin:0 auto; padding:22px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+    h1 { font-size:clamp(24px,4vw,36px); margin:0; }
+    .subtitle { color:var(--muted); margin-top:6px; font-size:14px; }
+    .controls { display:flex; align-items:end; gap:10px; flex-wrap:wrap; }
+    label { display:grid; gap:5px; color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; }
+    input, select { min-height:40px; border:1px solid var(--border); border-radius:8px; padding:8px 10px; background:#fff; }
+    button { min-height:40px; border:0; border-radius:8px; background:var(--blue); color:#fff; cursor:pointer; font-weight:800; padding:9px 14px; }
+    .status { min-height:44px; display:flex; align-items:center; gap:10px; border:1px solid var(--border); border-radius:8px; background:var(--card); padding:12px 14px; margin-bottom:16px; box-shadow:var(--shadow); }
+    .status.error { border-color:#fecaca; background:#fff1f2; color:var(--red); }
+    .dot { width:10px; height:10px; border-radius:999px; background:var(--muted); }
+    .dot.ok { background:var(--green); }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:16px; }
+    .card { border:1px solid var(--border); border-radius:8px; background:var(--card); padding:16px; box-shadow:var(--shadow); min-height:118px; display:grid; align-content:space-between; }
+    .card span { color:var(--muted); font-size:13px; font-weight:800; text-transform:uppercase; }
+    .card strong { font-size:clamp(24px,4vw,34px); }
+    .positive { color:var(--green); }
+    .negative { color:var(--red); }
+    .panel { border:1px solid var(--border); border-radius:8px; background:var(--card); box-shadow:var(--shadow); overflow:hidden; }
+    .panel-head { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; }
+    table { width:100%; border-collapse:collapse; min-width:720px; }
+    th, td { padding:12px 10px; border-bottom:1px solid var(--border); text-align:left; }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; }
+    .amount { font-weight:800; white-space:nowrap; }
   </style>
 </head>
 <body>
@@ -141,14 +47,14 @@
       </div>
       <div class="controls">
         <label>Branch <select id="branchFilter"></select></label>
-        <label>Date <input id="dateFilter" type="date" /></label>
+        <label>Date <input id="dateFilter" type="date"></label>
         <button id="refreshBtn">Refresh</button>
       </div>
     </header>
 
     <div id="status" class="status">
       <span class="dot"></span>
-      <span>Loading daily sales...</span>
+      <span>Loading...</span>
     </div>
 
     <section id="stats" class="stats"></section>
@@ -158,7 +64,7 @@
         <h2>Daily Reports</h2>
         <p id="reportCount" class="subtitle"></p>
       </div>
-      <div class="table-wrap">
+      <div style="overflow-x:auto">
         <table>
           <thead>
             <tr>
@@ -173,87 +79,94 @@
   </main>
 
   <script>
-    // ==================== PUT YOUR GOOGLE APPS SCRIPT URL HERE ====================
+    // === CHANGE THIS TO YOUR ACTUAL GOOGLE APPS SCRIPT URL ===
     const OWNER_SYNC_URL = "https://script.google.com/macros/s/AKfycbxkGTKS_kkc1UkgX_wgHEiFpyyEC2cCPUYsRFhpZ1Ry-6LKeRd11hAggxUKWmkOfoOR/exec";
-    // ===========================================================================
+    // =========================================================
 
     const $ = id => document.getElementById(id);
-    const money = v => `PHP ${Number(v||0).toLocaleString('en-PH', {minimumFractionDigits:2})}`;
-    const count = v => Number(v||0).toLocaleString('en-PH');
 
-    let ownerReports = [];
+    function money(v) { return `PHP ${Number(v||0).toLocaleString('en-PH',{minimumFractionDigits:2})}`; }
+    function count(v) { return Number(v||0).toLocaleString('en-PH'); }
 
-    function todayText() {
-      return new Date().toISOString().slice(0,10);
-    }
+    let reports = [];
 
-    function setStatus(msg, isOk = true) {
+    function setStatus(msg, ok=true) {
       const el = $('status');
-      el.className = isOk ? 'status' : 'status error';
-      el.innerHTML = `<span class="dot ${isOk?'ok':''}"></span><span>${msg}</span>`;
+      el.className = ok ? 'status' : 'status error';
+      el.innerHTML = `<span class="dot ${ok?'ok':''}"></span><span>${msg}</span>`;
     }
 
-    async function loadOwnerData() {
-      const selectedDate = $('dateFilter').value || todayText();
-      const selectedBranch = $('branchFilter').value;
-
+    async function loadData() {
       try {
-        setStatus('Loading daily sales...', true);
+        setStatus('Connecting to server...', true);
 
         const url = `${OWNER_SYNC_URL}?action=getAll&t=${Date.now()}`;
-        const res = await fetch(url, { method: 'GET', mode: 'cors' });
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache'
+        });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
 
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error || 'Server error');
+        const data = await response.json();
 
-        ownerReports = (data.reports || []).sort((a,b) => String(b.date).localeCompare(String(a.date)));
+        if (!data.ok) throw new Error(data.error || "Server returned error");
 
-        // Populate branch filter
-        const branches = [...new Set(ownerReports.map(r => r.branchId || r.branchName))];
-        const select = $('branchFilter');
-        select.innerHTML = `<option value="">All branches</option>` +
-          branches.map(b => `<option value="${b}">${ownerReports.find(r=> (r.branchId||r.branchName)===b)?.branchName || b}</option>`).join('');
+        reports = data.reports || [];
 
-        if (selectedBranch) select.value = selectedBranch;
-
-        // Filter reports
-        const filtered = selectedBranch 
-          ? ownerReports.filter(r => (r.branchId || r.branchName) === selectedBranch)
-          : ownerReports;
-
-        // Render table
-        $('reportsBody').innerHTML = filtered.map(r => `
-          <tr>
-            <td>${r.date}</td>
-            <td><strong>${r.branchName}</strong></td>
-            <td class="amount">${money(r.totalSales)}</td>
-            <td class="amount ${r.netProfit >= 0 ? 'positive' : 'negative'}">${money(r.netProfit)}</td>
-            <td class="amount">${money(r.totalExpenses)}</td>
-            <td>${count(r.transactionCount)}</td>
-            <td>${r.sentAt ? r.sentAt.slice(0,16).replace('T',' ') : '-'}</td>
-          </tr>
-        `).join('') || '<tr><td colspan="7" class="empty">No reports yet</td></tr>';
-
-        $('reportCount').textContent = `${filtered.length} report${filtered.length === 1 ? '' : 's'}`;
-
+        // Render
+        renderDashboard();
         setStatus(`Updated ${new Date().toLocaleTimeString()}`, true);
 
       } catch (err) {
         console.error(err);
-        setStatus(`Could not reach server: ${err.message}. Check OWNER_SYNC_URL and redeploy.`, false);
+        setStatus(`Could not reach server: ${err.message}<br><small>Check OWNER_SYNC_URL and redeploy Google Script as new version.</small>`, false);
       }
     }
 
+    function renderDashboard() {
+      const date = $('dateFilter').value || new Date().toISOString().slice(0,10);
+      const branch = $('branchFilter').value;
+
+      const filtered = branch ? reports.filter(r => (r.branchId || r.branchName) === branch) : reports;
+
+      // Branch filter
+      const branchSet = new Set();
+      reports.forEach(r => branchSet.add(r.branchId || r.branchName));
+      const select = $('branchFilter');
+      select.innerHTML = `<option value="">All branches</option>` + 
+        Array.from(branchSet).map(b => {
+          const name = reports.find(r => (r.branchId || r.branchName) === b)?.branchName || b;
+          return `<option value="${b}">${name}</option>`;
+        }).join('');
+
+      if (branch) select.value = branch;
+
+      // Table
+      $('reportsBody').innerHTML = filtered.map(r => `
+        <tr>
+          <td>${r.date || ''}</td>
+          <td><strong>${r.branchName || 'Unknown'}</strong></td>
+          <td class="amount">${money(r.totalSales)}</td>
+          <td class="amount ${Number(r.netProfit) >= 0 ? 'positive' : 'negative'}">${money(r.netProfit)}</td>
+          <td class="amount">${money(r.totalExpenses)}</td>
+          <td>${count(r.transactionCount)}</td>
+          <td>${r.sentAt ? r.sentAt.substring(0,16).replace('T',' ') : '-'}</td>
+        </tr>
+      `).join('') || `<tr><td colspan="7" style="text-align:center;padding:40px;color:#888">No reports found</td></tr>`;
+
+      $('reportCount').textContent = `${filtered.length} report${filtered.length===1?'':'s'}`;
+    }
+
     window.addEventListener('load', () => {
-      $('dateFilter').value = todayText();
-      $('refreshBtn').addEventListener('click', loadOwnerData);
-      $('branchFilter').addEventListener('change', loadOwnerData);
-      $('dateFilter').addEventListener('change', loadOwnerData);
-      
-      loadOwnerData();
-      setInterval(loadOwnerData, 120000); // auto refresh every 2 minutes
+      $('dateFilter').value = new Date().toISOString().slice(0,10);
+      $('refreshBtn').onclick = loadData;
+      $('branchFilter').onchange = renderDashboard;
+      $('dateFilter').onchange = renderDashboard;
+      loadData();
+      setInterval(loadData, 120000);
     });
   </script>
 </body>
